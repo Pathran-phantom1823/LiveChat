@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Quick Chat</title>
+	<title>Live Chat</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
 	<link rel="stylesheet" href="app.css">
 </head>
 
@@ -15,18 +16,17 @@
 
 		<header>
 			<div class="container flex-column flex-center">
-				<h1>Quick Chat</h1>
-				<p class="light-text">The easiest way to get your message across.</p>
+				<h1>Live Chat: Socket.io</h1>
 			</div>
 		</header>
 
 		<div id="mainContent" class="container flex-grow-1 flex-column ">
 
 			<section id="login" class="">
-				<h2 class="text-center">Get Started</h2>
+				<h2 class="text-center"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Login</h2>
 				<form id="loginForm" class="flex">
 					<input type="text" name="username " id="usernameInput" placeholder="username" class="flex-grow-1">
-					<button id="loginBtn">Chat!</button>
+					<button id="loginBtn"><i class="far fa-comment-dots"></i>&nbsp;&nbsp;Chat!</button>
 				</form>
 			</section>
 
@@ -36,7 +36,7 @@
 				</div>
 				<form id="messageForm" class="flex">
 					<input type="text" name="message " id="messageInput" class="flex-grow-1">
-					<button id="sendBtn">Send</button>
+					<button id="sendBtn">Send&nbsp;&nbsp;<i class="fas fa-location-arrow"></i></button>
 				</form>
 			</section>
 
