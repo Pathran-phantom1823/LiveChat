@@ -152,12 +152,16 @@ button {
 	padding: 20px;
 	width: 80%;
 	margin-bottom: 20px;
+	padding: 1em;
+	text-align: left;
+ 	line-height: 1.5em;
 }
 
 .message-right {
 	background: var(--light-blue);
 	color: var(--primary-text);
 	margin-left: 20%;
+	
 }
 
 .message-right .message-date {
