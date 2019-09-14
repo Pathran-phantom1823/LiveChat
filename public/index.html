@@ -19,26 +19,29 @@
 		<div id="mainContent" class="container flex-grow-1 flex-column ">
 
 			<section id="login" class="">
-					<h2 class="ui center aligned icon header">
-							<i class="circular users icon"></i>
-							Live Chat
-						  </h2>
+				<h2 class="ui center aligned icon header">
+					<i class="circular users icon"></i>
+					Live Chat
+				</h2>
 				<form id="loginForm" class="flex">
-						<div class="ui left icon input">
-								<input type="text" name="username" id="usernameInput" placeholder="Username">
-								<i class="user icon"></i>
-						</div>
-					<button id="loginBtn" class="ui teal button"><i class="comment alternate icon"></i>&nbsp;&nbsp;Chat</button>
-				</form>
+					<div class="ui left icon input">
+						<input type="text" name="username" id="usernameInput" placeholder="Username">
+						<i class="user icon"></i>
+					</div>
+				</form><br>
+				<center><button id="loginBtn" class="ui teal button"><i
+							class="comment alternate icon"></i>&nbsp;&nbsp;Chat</button></center>
 			</section>
-			
+
 			<section id="chat" class="flex-grow-1 flex-column hidden">
 				<div id="messagesList" class="flex-grow-1">
 
 				</div>
+				<section id="chatroom">
+					<section id="typingalert"></section>
+				</section><br>
 				<form id="messageForm" class="flex">
-					<div id="typingalert"></div>
-					<input type="text" name="message " id="messageInput" class="flex-grow-1">
+					<input type="text" name="message" id="messageInput" class="flex-grow-1">
 					<button id="sendBtn">Send&nbsp;&nbsp;<i class="fas fa-location-arrow"></i></button>
 				</form>
 			</section>
@@ -48,7 +51,7 @@
 		</div>
 	</div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 	<script src="app.js "></script>
 </body>

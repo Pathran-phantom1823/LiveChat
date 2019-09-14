@@ -104,14 +104,18 @@ header .container {
 /* Login */
 
 #login {
-	background: white;
+	background-image: linear-gradient(to bottom, #500ad5, #0f47e6, #0066ee, #007fef, #1296eb);
 	padding: 40px 100px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 	margin-top: -100px;
+	border-radius: 30px;
+	height: 50%;
 }
 
 #loginForm {
 	margin-top: 20px;
+	position: relative;
+	left: 100px;
 }
 
 /* Form Elements */
@@ -124,23 +128,33 @@ input {
 	color: var(--secondary-text);
 }
 
-button {
+button .loginBtn {
 	height: 40px;
 	padding: 0 15px;
 	background-color: var(--primary-blue);
 	color: white;
 	border: none;
+	
+}
+
+#sendBtn{
+	height: 40px;
+	padding: 0 15px;
+	background-color: var(--primary-blue);
+	/* color: white; */
+	border-radius:50px;
 }
 
 /* Chat */
 
 #chat {
-	background: white;
+	background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
 	height: 100px;
 	margin: 25px 0;
 	padding: 25px 25px;
 	color: white;
 	overflow-y: scroll;
+	border-radius: 30px;
 }
 
 #messageForm {
@@ -154,7 +168,8 @@ button {
 	margin-bottom: 20px;
 	padding: 1em;
 	text-align: left;
- 	line-height: 1.5em;
+	 line-height: 1.5em;
+	 border-radius: .4em;
 }
 
 .message-right {
