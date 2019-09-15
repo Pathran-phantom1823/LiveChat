@@ -5,6 +5,11 @@ const io = require('socket.io')(http);
 const path = require('path');
 var port = process.env.PORT || 3000;
 
+var count  = 0;
+
+// var username;
+
+
 //Serve public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -13,13 +18,18 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
+	count ++;
 	console.log('a user connected');
+	io.sockets.emit('count', {count:count})
+	socket.on('disconnect', function(){
+		count--;
+		io.sockets.emit('count', {count:count})
+	})
 
 	socket.on('disconnect', function () {
 		console.log('user disconnected');
 	});
 
-	socket.username = document.getElementById('usernameInput').value;
 
 	socket.on('message', function (message) {
 		console.log('message: ' + message);
@@ -27,17 +37,13 @@ io.on('connection', function (socket) {
 		io.emit('message', message);
 	});
 
-	socket.on('typing', function(data){
-		console.log({author:io.username})
+	socket.on('typing', function(message){
+		console.log({username:socket.author})
 		socket.broadcast.emit('typing', {username:socket.username})
 	})
 	
+	
 });
-
-
-
-
-
 
 http.listen(port, function () {
 	console.log('listening on port 3000');

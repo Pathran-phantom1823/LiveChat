@@ -1,4 +1,4 @@
-const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
+const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login', LOGOUT: 'logout' };
 
 //Chat stuff
 const chatWindow = document.getElementById('chat');
@@ -6,8 +6,12 @@ const messagesList = document.getElementById('messagesList');
 var messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 var typeStatus = document.getElementById('typingalert');
+// 	var usersWindow = document.getElementById('users');
 var typingDelayMillis = 5000;
+var userList = [];
 var lastTypedTime = new Date(0);
+var logoutBtn = document.getElementById('logoutBtn');
+
 
 //login stuff
 var username = '';
@@ -27,26 +31,8 @@ socket.on('message', function (message) {
 	if (message.type !== messageTypes.LOGIN) {
 		if (message.author === username) {
 			message.type = messageTypes.RIGHT;
-			// document.addEventListener("click", function () {
-			// 	if (inputM.addEventListener("keydown", function () {
-			// 		alert.innerHTML = username + "Is Typing..."
-			// 	}));
-			// 	else if (inputM.addEventListener("keyup", function () {
-			// 		alert.innerHTML = ""
-			// 	}));
-
-			// });
 		} else {
 			message.type = messageTypes.LEFT;
-			// document.addEventListener("click", function () {
-			// 	if (inputM.addEventListener("keydown", function () {
-			// 		alert.innerHTML = username + "Is Typing..."
-			// 	}));
-			// 	else if (inputM.addEventListener("keyup", function () {
-			// 		alert.innerHTML = ""
-			// 	}));
-
-			// });
 		}
 	}
 
@@ -64,6 +50,12 @@ createMessageHTML = function (message) {
 			message.author
 			} joined the chat...</p>
 		`;
+	}else if (message.type === messageTypes.LOGOUT) {
+		return `
+			<p class="secondary-text text-center mb-2">${
+			message.author
+			} lEFT the chat...</p>
+		`;
 	}
 	return `
 	<div class="message ${
@@ -71,7 +63,7 @@ createMessageHTML = function (message) {
 		}">
 		<div class="message-details flex">
 			<p class="flex-grow-1 message-author">${
-		message.type === messageTypes.LEFT ? message.author : ''
+		message.type === messageTypes.LEFT ? message.author : 'You Sent..'
 		}</p>
 			<p class="message-date">${message.date}</p>
 		</div>
@@ -79,6 +71,26 @@ createMessageHTML = function (message) {
 	</div>
 	`;
 };
+
+// clearMessage = function(message){
+// 	if (message.type === messageTypes.LOGOUT) {
+// 		return `
+// 			<p class="secondary-text text-center mb-2">${
+// 			message.author
+// 			} lEFT the chat...</p>
+// 		`;
+// 	}
+// }
+
+logoutBtn.addEventListener('click', function(){
+	loginWindow.classList.remove('hidden');
+	chatWindow.classList.add('hidden');
+	document.getElementById('count').classList.add('hidden');
+	document.getElementById('messageForm').classList.add('hidden');
+	document.getElementById('logoutBtn').style.display = 'none';
+
+
+})
 
 
 
@@ -89,13 +101,25 @@ displayMessages = function () {
 	messagesList.innerHTML = messagesHTML;
 };
 
+	socket.on('count', function(data){
+		document.getElementById('counter').innerHTML = data.count;
+		console.log(data.count);
+	});
+
 inputM.addEventListener("keypress", function () {
-	socket.emit("typing");
+	socket.emit('typing');
 })
 
-socket.on('typing', function (data) {
-	alert.innerHTML = "<p><i>" + data.username + " Is typing.." + "</i></p>";
+socket.on('typing', function (message) {
+	username = usernameInput.value;
+	alert.innerHTML = username + " Is typing..";
+	setTimeout(function(){
+		alert.innerHTML = "";
+	},3000);
 })
+
+
+
 
 
 sendBtn.addEventListener('click', function (e) {
@@ -136,24 +160,14 @@ loginBtn.addEventListener('click', function (e) {
 	//show chat window and hide login
 	loginWindow.classList.add('hidden');
 	chatWindow.classList.remove('hidden');
+	document.getElementById('count').classList.remove('hidden');
+	document.getElementById('messageForm').classList.remove('hidden');
+	document.getElementById('logoutBtn').style.display = 'block';
+	// usersWindow.classList.remove('hidden')
+	
 });
 
 sendMessage = function (message) {
 	socket.emit('message', message);
 };
 
-// refreshtTypingStatus = function () {
-// 	if(!messageInput.is(':focus')|| messageInput.value == '' || new Date().getTime()-lastTypedTime.getTime() > typingDelayMillis){
-// 		typeStatus.innerHTML = '';
-// 	}else{
-// 		typeStatus.innerHTML= username + "Is Typing";
-// 	}
-
-// }
-
-// updatelastTime = function(){
-// 	lastTypedTime = new Date();
-// }
-// setInterval(refreshTypingStatus, 100);
-// messageInput.addEventListener('keyup',updatelastTime());
-// messageInput.addEventListener('blur',refreshTypingStatus());

@@ -14,7 +14,14 @@
 <body>
 
 	<div id="appContainer" class="flex-column">
+		<div align="left" class="hidden" id=count>
+			<h3> No. Users : <span id="counter"></span></h3>
+		</div>
 
+		<button id="logoutBtn" class="ui basic button" style="display:none">
+				<i class="icon user"></i>
+				LogOut
+			  </button>
 
 		<div id="mainContent" class="container flex-grow-1 flex-column ">
 
@@ -29,10 +36,19 @@
 						<i class="user icon"></i>
 					</div>
 				</form><br>
-				<center><button id="loginBtn" class="ui teal button"><i
-							class="comment alternate icon"></i>&nbsp;&nbsp;Chat</button></center>
+				<center><button id="loginBtn" class="ui teal button"><i class="comment alternate icon"></i>&nbsp;&nbsp;Chat</button></center>
 			</section>
+			<!-- <table>
+				<thead>
+					<tr>
+						<th>Users</th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
 
+				</tbody>
+
+			</table> -->
 			<section id="chat" class="flex-grow-1 flex-column hidden">
 				<div id="messagesList" class="flex-grow-1">
 
@@ -40,12 +56,12 @@
 				<section id="chatroom">
 					<section id="typingalert"></section>
 				</section><br>
-				<form id="messageForm" class="flex">
-					<input type="text" name="message" id="messageInput" class="flex-grow-1">
-					<button id="sendBtn">Send&nbsp;&nbsp;<i class="fas fa-location-arrow"></i></button>
-				</form>
 			</section>
-
+			
+				<form id="messageForm" class="flex hidden">
+						<input type="text" name="message" id="messageInput" class="flex-grow-1">
+						<button id="sendBtn">Send&nbsp;&nbsp;<i class="fas fa-location-arrow"></i></button>
+					</form>
 
 
 		</div>
