@@ -14,14 +14,22 @@
 <body>
 
 	<div id="appContainer" class="flex-column">
+			<button id="logoutBtn" class="ui basic button" style="display:none">
+					<i class="icon user"></i>
+					LogOut
+				  </button>
 		<div align="left" class="hidden" id=count>
 			<h3> No. Users : <span id="counter"></span></h3>
 		</div>
+		<div align="left"  id=userLists>
+				<h3>Users : 
+					<ul id="usersConnected">
 
-		<button id="logoutBtn" class="ui basic button" style="display:none">
-				<i class="icon user"></i>
-				LogOut
-			  </button>
+					</ul>
+				</h3>
+			</div>
+
+		
 
 		<div id="mainContent" class="container flex-grow-1 flex-column ">
 
@@ -38,17 +46,7 @@
 				</form><br>
 				<center><button id="loginBtn" class="ui teal button"><i class="comment alternate icon"></i>&nbsp;&nbsp;Chat</button></center>
 			</section>
-			<!-- <table>
-				<thead>
-					<tr>
-						<th>Users</th>
-					</tr>
-				</thead>
-				<tbody id="tbody">
-
-				</tbody>
-
-			</table> -->
+			
 			<section id="chat" class="flex-grow-1 flex-column hidden">
 				<div id="messagesList" class="flex-grow-1">
 

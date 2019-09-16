@@ -8,7 +8,7 @@ const sendBtn = document.getElementById('sendBtn');
 var typeStatus = document.getElementById('typingalert');
 // 	var usersWindow = document.getElementById('users');
 var typingDelayMillis = 5000;
-var userList = [];
+var userList = new Array();
 var lastTypedTime = new Date(0);
 var logoutBtn = document.getElementById('logoutBtn');
 
@@ -45,18 +45,15 @@ socket.on('message', function (message) {
 
 createMessageHTML = function (message) {
 	if (message.type === messageTypes.LOGIN) {
-		return `
-			<p class="secondary-text text-center mb-2">${
-			message.author
-			} joined the chat...</p>
-		`;
-	}else if (message.type === messageTypes.LOGOUT) {
-		return `
-			<p class="secondary-text text-center mb-2">${
-			message.author
-			} lEFT the chat...</p>
-		`;
+		if(message.author !== usernameInput.value){
+			return `
+				<p class="secondary-text text-center mb-2">${
+				message.author
+				} joined the chat...</p>
+			`;
 	}
+	return "";
+}
 	return `
 	<div class="message ${
 		message.type === messageTypes.LEFT ? 'message-left' : 'message-right'
@@ -72,17 +69,8 @@ createMessageHTML = function (message) {
 	`;
 };
 
-// clearMessage = function(message){
-// 	if (message.type === messageTypes.LOGOUT) {
-// 		return `
-// 			<p class="secondary-text text-center mb-2">${
-// 			message.author
-// 			} lEFT the chat...</p>
-// 		`;
-// 	}
-// }
-
 logoutBtn.addEventListener('click', function(){
+	socket.disconnect();
 	loginWindow.classList.remove('hidden');
 	chatWindow.classList.add('hidden');
 	document.getElementById('count').classList.add('hidden');
@@ -91,7 +79,6 @@ logoutBtn.addEventListener('click', function(){
 
 
 })
-
 
 
 displayMessages = function () {
@@ -117,9 +104,6 @@ socket.on('typing', function (message) {
 		alert.innerHTML = "";
 	},3000);
 })
-
-
-
 
 
 sendBtn.addEventListener('click', function (e) {
@@ -149,6 +133,7 @@ sendBtn.addEventListener('click', function (e) {
 
 loginBtn.addEventListener('click', function (e) {
 	e.preventDefault();
+	addusers();
 	if (!usernameInput.value) {
 		return console.log('Must supply a username');
 	}
@@ -166,6 +151,16 @@ loginBtn.addEventListener('click', function (e) {
 	// usersWindow.classList.remove('hidden')
 	
 });
+
+addusers = function(){
+	username = usernameInput.value;
+	userList.push(username);
+	var list = document.createElement('LI');
+	var item = document.createTextNode("fsdfhf");
+	list.appendChild(item);
+	document.getElementById('usersConnected').appendChild(list);
+	console.log(list);
+}
 
 sendMessage = function (message) {
 	socket.emit('message', message);
