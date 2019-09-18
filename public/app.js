@@ -75,9 +75,8 @@ logoutBtn.addEventListener('click', function () {
 	socket.disconnect();
 	loginWindow.classList.remove('hidden');
 	chatWindow.classList.add('hidden');
-	document.getElementById('count').classList.add('hidden');
 	document.getElementById('messageForm').classList.add('hidden');
-	document.getElementById('logoutBtn').style.display = 'none';
+	document.getElementById('pusher').classList.add('hidden');
 
 
 })
@@ -168,10 +167,9 @@ loginBtn.addEventListener('click', function (e) {
 	//show chat window and hide login
 	loginWindow.classList.add('hidden');
 	chatWindow.classList.remove('hidden');
-	document.getElementById('count').classList.remove('hidden');
+	document.getElementById('pusher').classList.remove('hidden');
 	document.getElementById('messageForm').classList.remove('hidden');
-	document.getElementById('logoutBtn').style.display = 'block';
-	// usersWindow.classList.remove('hidden')
+	
 	
 });
 

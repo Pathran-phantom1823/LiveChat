@@ -47,14 +47,16 @@ io.on('connection', function (socket) {
 		console.log({ username: io.sockets.author })
 		socket.broadcast.emit('typing', { username: socket.username })
 	})
+
+	socket.on('disconnect', function () {
+		console.log('user disconnected');
+		count--;
+		io.sockets.emit('count', { count: count })
+	
+	})
 });
 
-io.on('disconnect', function () {
-	console.log('user disconnected');
-	count--;
-	io.sockets.emit('count', { count: count })
 
-})
 function getUserList() {
 	var ret = [];
 	for (var i = 0; i < clients.length; i++) {
