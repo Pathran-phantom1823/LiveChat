@@ -11,6 +11,7 @@ var typingDelayMillis = 5000;
 var userList = new Array();
 var lastTypedTime = new Date(0);
 var logoutBtn = document.getElementById('logoutBtn');
+var usersList = document.getElementById('usersConnected');
 
 
 //login stuff
@@ -24,6 +25,7 @@ var alert = document.getElementById('typingalert');
 const messages = []; // { author, date, content, type }
 
 //Connect to socket.io - automatically tries to connect on same port app was served from
+
 var socket = io();
 
 socket.on('message', function (message) {
@@ -45,15 +47,15 @@ socket.on('message', function (message) {
 
 createMessageHTML = function (message) {
 	if (message.type === messageTypes.LOGIN) {
-		if(message.author !== usernameInput.value){
+		if (message.author !== usernameInput.value) {
 			return `
-				<p class="secondary-text text-center mb-2">${
+				<p class="primary-text text-center mb-2">${
 				message.author
 				} joined the chat...</p>
 			`;
+		}
+		return "";
 	}
-	return "";
-}
 	return `
 	<div class="message ${
 		message.type === messageTypes.LEFT ? 'message-left' : 'message-right'
@@ -69,7 +71,7 @@ createMessageHTML = function (message) {
 	`;
 };
 
-logoutBtn.addEventListener('click', function(){
+logoutBtn.addEventListener('click', function () {
 	socket.disconnect();
 	loginWindow.classList.remove('hidden');
 	chatWindow.classList.add('hidden');
@@ -88,23 +90,45 @@ displayMessages = function () {
 	messagesList.innerHTML = messagesHTML;
 };
 
-	socket.on('count', function(data){
-		document.getElementById('counter').innerHTML = data.count;
-		console.log(data.count);
-	});
+
+
+socket.on('count', function (data) {
+	document.getElementById('counter').innerHTML = data.count;
+	console.log(data.count);
+});
+
+var current = [];
+socket.on('username', function (data) {
+	for (var user in data) {
+		var isOnline = data[user].online
+		if (!current.includes(user)) {
+			if (isOnline) {
+				$('#chat').append('<div class= "online">' + user + " is online" + '</div>');
+				current.push(user)
+			}
+		} else {
+			if (!isOnline) {
+				$('#chat').append('<div class= "not_online">' + user + " is online" + '</div>');
+			}
+		}
+
+	}
+
+});
+
+
 
 inputM.addEventListener("keypress", function () {
 	socket.emit('typing');
-})
+});
 
 socket.on('typing', function (message) {
 	username = usernameInput.value;
 	alert.innerHTML = username + " Is typing..";
-	setTimeout(function(){
+	setTimeout(function () {
 		alert.innerHTML = "";
-	},3000);
-})
-
+	}, 3000);
+});
 
 sendBtn.addEventListener('click', function (e) {
 	e.preventDefault();
@@ -133,7 +157,6 @@ sendBtn.addEventListener('click', function (e) {
 
 loginBtn.addEventListener('click', function (e) {
 	e.preventDefault();
-	addusers();
 	if (!usernameInput.value) {
 		return console.log('Must supply a username');
 	}
@@ -152,15 +175,23 @@ loginBtn.addEventListener('click', function (e) {
 	
 });
 
-addusers = function(){
-	username = usernameInput.value;
-	userList.push(username);
-	var list = document.createElement('LI');
-	var item = document.createTextNode("fsdfhf");
-	list.appendChild(item);
-	document.getElementById('usersConnected').appendChild(list);
-	console.log(list);
-}
+socket.on('connect', function () {
+	loginBtn.addEventListener('click',()=>{
+		socket.emit("intro", username);
+	})
+});
+
+socket.on("userList", function (data) {
+	var html = '';
+	for (i = 0; i < data.length; i++) {
+		html += '<li class="userItem">' + data[i] + '</li>';
+		console.log(html)
+		
+	}
+	$("#userList").html(html);
+
+})
+
 
 sendMessage = function (message) {
 	socket.emit('message', message);
