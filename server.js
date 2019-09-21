@@ -6,7 +6,7 @@ const path = require('path');
 var port = process.env.PORT || 3000;
 
 var count = 0;
-var clients = [];
+var users = [];
 
 
 
@@ -23,48 +23,41 @@ app.get('/', function (req, res) {
 
 
 io.on('connection', function (socket) {
-	count++;
+	
 	console.log('a user connected');
 
-	socket.on('intro', (data) => {
-		clients.push(socket);
-		socket.username = data;
-		users = getUserList();
-		console.log(users);
-		io.emit("userList", users);
-	})
-
-	io.sockets.emit('count', { count: count })
 	
-
+	//ADDED NICKNAME
+	socket.on('send-nickname', function (data) {
+		socket.nickname = data;
+		// if (users.indexOf(data) > -1) {
+		// 	socket.emit('userExists', data + ' username is taken! Try some other username.');
+		// } else {
+			users.push(socket.nickname);
+			io.sockets.emit('allUsers', users);
+		// }
+	});
+	//DISCONNECTION
+	socket.on('disconnect', function () {
+		var index = users.indexOf(socket.nickname);
+		if (index > -1) {
+			users.splice(index, 1);
+		}
+		io.sockets.emit('allUsers', users);
+		//THIS IS NOT DONE //////////////////////////////////////////////////
+		io.sockets.emit('allUsersDis', users);
+	});
+	//TYPING
+	socket.on('typing', function (data) {
+		socket.broadcast.emit('typing', { username: socket.nickname });
+	})
+	//MESSAGE SENDING
 	socket.on('message', function (message) {
 		console.log('message: ' + message);
-		//Broadcast the message to everyone
 		io.emit('message', message);
 	});
-
-	socket.on('typing', function (message) {
-		console.log({ username: io.sockets.author })
-		socket.broadcast.emit('typing', { username: socket.username })
-	})
-
-	socket.on('disconnect', function () {
-		console.log('user disconnected');
-		count--;
-		io.sockets.emit('count', { count: count })
-	
-	})
 });
 
-
-function getUserList() {
-	var ret = [];
-	for (var i = 0; i < clients.length; i++) {
-		ret.push(clients[i].username);
-	}
-	return ret;
-}
-
 http.listen(port, function () {
-	console.log('listening on port 3000');
+	console.log('listening on port ' + port);
 });

@@ -1,197 +1,169 @@
-const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login', LOGOUT: 'logout' };
+$(document).ready(function () {
 
-//Chat stuff
-const chatWindow = document.getElementById('chat');
-const messagesList = document.getElementById('messagesList');
-var messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-var typeStatus = document.getElementById('typingalert');
-// 	var usersWindow = document.getElementById('users');
-var typingDelayMillis = 5000;
-var userList = new Array();
-var lastTypedTime = new Date(0);
-var logoutBtn = document.getElementById('logoutBtn');
-var usersList = document.getElementById('usersConnected');
+	const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
+
+	//Chat stuff
+	const chatWindow = $('#chat');
+	const messagesList = $('#messagesList');
+	const messageInput = $('#messageInput');
+	const sendBtn = $('#sendBtn');
+	const messageForm = $('#messageForm');
+	//login stuff
+	let username = '';
+	const usernameInput = $('#usernameInput');
+	const loginBtn = $('#loginBtn');
+	const loginWindow = $('#login');
 
 
-//login stuff
-var username = '';
-const usernameInput = document.getElementById('usernameInput');
-const loginBtn = document.getElementById('loginBtn');
-const loginWindow = document.getElementById('login');
-var inputM = document.getElementById('messageInput');
-var alert = document.getElementById('typingalert');
+	const messages = []; // { author, date, content, type }
 
-const messages = []; // { author, date, content, type }
-
-//Connect to socket.io - automatically tries to connect on same port app was served from
-
-var socket = io();
-
-socket.on('message', function (message) {
-	//Update type of message based on username
-	if (message.type !== messageTypes.LOGIN) {
-		if (message.author === username) {
-			message.type = messageTypes.RIGHT;
-		} else {
-			message.type = messageTypes.LEFT;
+	//Connect to socket.io - automatically tries to connect on same port app was served from
+	var socket = io();
+	messageForm.addClass('hidden');
+	socket.on('message', function (message) {
+		//Update type of message based on username
+		if (message.type !== messageTypes.LOGIN) {
+			if (message.author === username) {
+				message.type = messageTypes.RIGHT;
+			} else {
+				message.type = messageTypes.LEFT;
+			}
 		}
-	}
 
-	messages.push(message);
-	displayMessages();
+		messages.push(message);
+		displayMessages();
 
-	//scroll to the bottom
-	chatWindow.scrollTop = chatWindow.scrollHeight;
-});
+		//scroll to the bottom
+		chatWindow.scrollTop() = chatWindow.height();
+	});
 
-createMessageHTML = function (message) {
-	if (message.type === messageTypes.LOGIN) {
-		if (message.author !== usernameInput.value) {
+	createMessageHTML = function (message) {
+		if (message.type === messageTypes.LOGIN) {
 			return `
-				<p class="primary-text text-center mb-2">${
+			<br><p class="secondary-text text-center mb-2" id="status">${
 				message.author
 				} joined the chat...</p>
-			`;
+		`;
 		}
-		return "";
-	}
-	return `
-	<div class="message ${
-		message.type === messageTypes.LEFT ? 'message-left' : 'message-right'
-		}">
-		<div class="message-details flex">
-			<p class="flex-grow-1 message-author">${
-		message.type === messageTypes.LEFT ? message.author : 'You Sent..'
-		}</p>
-			<p class="message-date">${message.date}</p>
-		</div>
-		<p class="message-content">${message.content}</p>
+		else {
+
+		}
+
+
+
+		//I STOPPED RIGHT HERE
+		return `
+	<div class="messages ${
+			message.type === messageTypes.LEFT ? 'you' : 'me'
+			}">
+		<div style="flex-direction: column;
+		text-overflow: ellipsis;
+		white-space: initial;
+		word-wrap: break-word;
+		overflow: hidden; padding: 20px;">
+		<p style="font-weight: bold">${
+			message.type === messageTypes.LEFT ? message.author : ''
+			}</p>
+     		${message.content} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<br>
+			 <p style="float: right">${message.date}</p>
+  		</div>
 	</div>
 	`;
-};
+	};
 
-logoutBtn.addEventListener('click', function () {
-	socket.disconnect();
-	loginWindow.classList.remove('hidden');
-	chatWindow.classList.add('hidden');
-	document.getElementById('messageForm').classList.add('hidden');
-	document.getElementById('pusher').classList.add('hidden');
+	displayMessages = function () {
+		const messagesHTML = messages
+			.map(message => createMessageHTML(message))
+			.join('');
+		messagesList.html(messagesHTML);
+	};
 
-
-})
-
-
-displayMessages = function () {
-	const messagesHTML = messages
-		.map(message => createMessageHTML(message))
-		.join('');
-	messagesList.innerHTML = messagesHTML;
-};
-
-
-
-socket.on('count', function (data) {
-	document.getElementById('counter').innerHTML = data.count;
-	console.log(data.count);
-});
-
-var current = [];
-socket.on('username', function (data) {
-	for (var user in data) {
-		var isOnline = data[user].online
-		if (!current.includes(user)) {
-			if (isOnline) {
-				$('#chat').append('<div class= "online">' + user + " is online" + '</div>');
-				current.push(user)
-			}
-		} else {
-			if (!isOnline) {
-				$('#chat').append('<div class= "not_online">' + user + " is online" + '</div>');
-			}
+	sendBtn.on("click", function (e) {
+		e.preventDefault();
+		if (!messageInput.val()) {
+			console.log('Invalid input');
 		}
 
-	}
+		function formatAMPM(date) {
+			var hours = date.getHours();
+			var minutes = date.getMinutes();
+			var ampm = hours >= 12 ? 'PM' : 'AM';
+			var month = date.getMonth();
+			var day = date.getDate();
+			var year = date.getFullYear();
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			var strTime = hours + ':' + minutes + ' ' + ampm + '  ' + month + '/' + day + '/' + year;
+			return strTime;
+		}
 
-});
-
-
-
-inputM.addEventListener("keypress", function () {
-	socket.emit('typing');
-});
-
-socket.on('typing', function (message) {
-	username = usernameInput.value;
-	alert.innerHTML = username + " Is typing..";
-	setTimeout(function () {
-		alert.innerHTML = "";
-	}, 3000);
-});
-
-sendBtn.addEventListener('click', function (e) {
-	e.preventDefault();
-	if (!messageInput.value) {
-		return console.log('Invalid input');
-	}
-
-	const date = new Date();
-	const month = ('0' + date.getMonth()).slice(0, 2);
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
-	const day = date.getDate();
-	const year = date.getFullYear();
-	const dateString = `${month}/${day}/${year}_${hours}:${minutes}`;
-
-	const message = {
-		author: username,
-		date: dateString,
-		content: messageInput.value
-	};
-	sendMessage(message);
-	//clear input
-	messageInput.value = '';
-});
+		const message = {
+			author: username,
+			date: formatAMPM(new Date()),
+			content: messageInput.val()
+		};
+		sendMessage(message);
+		//clear input
+		messageInput.val("");
+	});
 
 
-loginBtn.addEventListener('click', function (e) {
-	e.preventDefault();
-	if (!usernameInput.value) {
-		return console.log('Must supply a username');
-	}
+	loginBtn.on("click", function (e) {
+		e.preventDefault();
 
-	//set the username and create logged in message
-	username = usernameInput.value;
-	sendMessage({ author: username, type: messageTypes.LOGIN });
+		if (!usernameInput.val()) {
+			console.log('Must supply a username');
+			return Swal.fire({
+				type: 'error',
+				title: 'Please input username!',
+			})
+		}
 
-	//show chat window and hide login
-	loginWindow.classList.add('hidden');
-	chatWindow.classList.remove('hidden');
-	document.getElementById('pusher').classList.remove('hidden');
-	document.getElementById('messageForm').classList.remove('hidden');
-	
-	
-});
+		//set the username and create logged in message
+		username = usernameInput.val();
+		sendMessage({ author: username, type: messageTypes.LOGIN });
+		//ADDED NICKNAME
+		socket.emit('send-nickname', username);
 
-socket.on('connect', function () {
-	loginBtn.addEventListener('click',()=>{
-		socket.emit("intro", username);
+		loginWindow.addClass('hidden');
+		chatWindow.removeClass('hidden');
+		messageForm.removeClass('hidden');
+		document.getElementById('pusher').classList.remove('hidden');
+		// document.getElementById('messageForm').classList.remove('hidden');
 	})
-});
 
-socket.on("userList", function (data) {
-	var html = '';
-	for (i = 0; i < data.length; i++) {
-		html += '<li class="userItem">' + data[i] + '</li>';
-		console.log(html)
-		
-	}
-	$("#userList").html(html);
+
+
+	$('#logoutBtn').click(function(){
+		window.location.replace("index.html");
+	})
+
+	socket.on('allUsers', function (listOfUsers) {
+		$('#noOfUsers').text(listOfUsers.length);
+	});
+
+	socket.on('allUsers', function (users) {
+		$('#userList').html(users.join(", ").replace(/,/g,"<br>"));
+		// $('#messages').html();
+	});
+
+	sendMessage = function (message) {
+		socket.emit('message', message);
+	};
+
+	$('#messageInput').bind("keypress", function () {
+		socket.emit('typing');
+	})
+
+	socket.on('typing', function (message, err) {
+		console.log(err);
+		messagesList.append('<h6 id="isTyping" style="color: black; font-size: 20px;"></h6>');
+		$('#typingalert').html(message.username + " is typing a message...");
+		setTimeout(function () {
+			$("#typingalert").html('');
+		}, 3000);
+	})
+
 
 })
-
-
-sendMessage = function (message) {
-	socket.emit('message', message);
-};
-
