@@ -60,7 +60,7 @@ $(document).ready(function () {
 		text-overflow: ellipsis;
 		white-space: initial;
 		word-wrap: break-word;
-		overflow: hidden; padding: 20px;">
+		overflow: hidden; padding: 10px;">
 		<p style="font-weight: bold">${
 			message.type === messageTypes.LEFT ? message.author : ''
 			}</p>
@@ -69,7 +69,7 @@ $(document).ready(function () {
   		</div>
 	</div>
 	`;
-	};
+	};	
 
 	displayMessages = function () {
 		const messagesHTML = messages

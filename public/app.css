@@ -79,7 +79,7 @@ h1 {
 	height: 100vh;
 	width: 100vw;
 	align-items: stretch;
-	background-color: var(--primary-blue);
+	background-image: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/B2IPYFY4ipb5vdgt/raindrops-on-the-window-abstract-background-blue-tone_slphvebc_thumbnail-full01.png');
 	overflow: hidden;
 }
 
@@ -104,9 +104,11 @@ header .container {
 /* Login */
 
 #login {
-	background-image: linear-gradient(to bottom, #500ad5, #0f47e6, #0066ee, #007fef, #1296eb);
+	/* background:transparent; */
+	background-color: rgba(0,0,0 .10);  
+ 	backdrop-filter: blur(2px);
+	 box-shadow: 1px 1px 2px black, 0 0 25px lightblue, 0 0 5px black;
 	padding: 40px 100px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 	margin-top: -100px;
 	border-radius: 30px;
 	height: 50%;
@@ -116,6 +118,7 @@ header .container {
 	margin-top: 20px;
 	position: relative;
 	left: 100px;
+	
 }
 
 /* Form Elements */
@@ -148,7 +151,9 @@ button .loginBtn {
 /* Chat */
 
 #chat {
-	background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+	background-color: rgba(0, 0, 0, .15);  
+ 	backdrop-filter: blur(2px);
+	 box-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
 	height: 100px;
 	margin: 25px 0;
 	padding: 25px 25px;
@@ -164,7 +169,7 @@ button .loginBtn {
 .message {
 	background-color: var(--primary-blue);
 	padding: 20px;
-	width: 80%;
+	width: 50%;
 	margin-bottom: 20px;
 	padding: 1em;
 	text-align: left;
@@ -200,17 +205,19 @@ button .loginBtn {
 	font-weight: 100;
 }
  #users{	
-	background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+	background-image: 	rgb(204, 217, 255, 0.5);
 	position: relative;
 	right: 50%;
 	width: 40%;
-	top: 30%;
  }
 
  .me {
 	position: relative;
-	background: #2270e6;
+	background:	rgb(0, 64, 255, 0.3);
+	box-shadow: 1px 1px 2px black, 0 0 5px black;	
 	border-radius: .4em;
+	width: 70%;
+	float: right;
 }
 
 .me:after {
@@ -221,18 +228,20 @@ button .loginBtn {
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
-	border-left-color:#2270e6;
+	border-left-color: rgb(0, 64, 255, 0.3);
 	border-right: 0;
-	border-top: 0;
+	border-bottom: 0;
 	margin-top: -10px;
-	margin-right: -20px;
-	margin-left: 50%;
+	margin-right: -20px;	
 }
 
  .you {
 	position: relative;
-	background: #06b96f;
+	background: 	rgb(255, 128, 0, 0.3);
+	box-shadow: 1px 1px 2px black, 0 0 5px black;
 	border-radius: .4em;
+	width: 70%;
+	float: left;
 }
 
  .you:after {
@@ -243,7 +252,7 @@ button .loginBtn {
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
-	border-right-color: #06b96f;
+	border-right-color: rgb(255, 128, 0, 0.3);
 	border-left: 0;
 	border-top: 0;
 	margin-top: -10px;
