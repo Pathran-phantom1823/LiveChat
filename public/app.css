@@ -148,6 +148,10 @@ button .loginBtn {
 	border-radius:50px;
 }
 
+#sendBtn:hover{
+	background-color: green;
+}
+
 /* Chat */
 
 #chat {
@@ -258,4 +262,8 @@ button .loginBtn {
 	margin-top: -10px;
 	margin-left: -20px;
 	
+}
+
+#userList{
+	font-size: 20px;
 }

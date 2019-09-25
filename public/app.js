@@ -40,7 +40,7 @@ $(document).ready(function () {
 	createMessageHTML = function (message) {
 		if (message.type === messageTypes.LOGIN) {
 			return `
-			<br><p class="secondary-text text-center mb-2" id="status">${
+			<br><p class="secondary-text text-center mb-2" id="status" style="color:white">${
 				message.author
 				} joined the chat...</p>
 		`;
@@ -144,7 +144,7 @@ $(document).ready(function () {
 	});
 
 	socket.on('allUsers', function (users) {
-		$('#userList').html(users.join(", ").replace(/,/g,"<br>"));
+		$('#userList').html("<center>"+users.join(", ").replace(/,/g,"<br><hr>")+"</center>");
 		// $('#messages').html();
 	});
 
